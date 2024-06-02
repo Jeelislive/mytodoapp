@@ -26,7 +26,7 @@ const Signup = () => {
                 },
                 body: JSON.stringify({ username, email, password })
             }
-            const response = await fetch('http://localhost:3000/signup', option);
+            const response = await fetch('https://mytodoapp-fqj8.vercel.app/signup', option);
 
             if (response.ok) {
                 navigate('/todo');
