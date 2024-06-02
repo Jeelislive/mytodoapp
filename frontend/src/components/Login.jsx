@@ -18,7 +18,8 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password }),
+                mode: 'cors'
             }
             const response = await fetch('https://mytodoapp-fqj8.vercel.app/login', option);
             if (response.ok) {
