@@ -12,7 +12,7 @@ import isLoggedIn from './middlewares/isLoggedIn.js';
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: 'https://mytodoapp-mu.vercel.app' }));
 
 mongoose.connect(process.env.MONGODB_URL);
 const fail = 'fail';
