@@ -24,7 +24,8 @@ const Signup = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ username, email, password }),
+                mode: 'cors'
             }
             const response = await fetch('http://localhost:3000/signup', option);
 

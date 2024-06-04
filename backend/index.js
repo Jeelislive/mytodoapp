@@ -14,49 +14,54 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+  res.send("Hello world");
+});
+
 mongoose.connect(process.env.MONGODB_URL);
 const fail = 'fail';
 
 app.post('/signup', async (req, res) => {
+
   try {
     const { username, email, password } = req.body;
 
-    const existingUser = await User.findOne({ email: email });
-    if (existingUser) throw new Error("User already exist");
+      const existingUser = await User.findOne({ email: email });
+      if (existingUser) throw new Error("User already exist");
 
-    const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
+      const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 
-    const user = await User.create({
-      username,
-      email,
-      password: hashedPassword
-    });
+      const user = await User.create({
+        username,
+        email,
+        password: hashedPassword
+      });
 
-    const payload = {
-      id: user._id
-    };
+      const payload = {
+        id: user._id
+      };
 
-    const token = jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    )
+      const token = jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      )
 
-    res.status(200).json({
-      status: "success",
-      message: "signup successfully",
-      date: {
-        user: user,
-        token: token
-      }
-    });
+      res.status(200).json({
+        status: "success",
+        message: "signup successfully",
+        date: {
+          user: user,
+          token: token
+        }
+      });
 
-  } catch (error) {
-    res.status(400).json({
-      status: fail, 
-      message: error.message
-    })
-  }
+    } catch (error) {
+      res.status(400).json({
+        status: fail,
+        message: error.message
+      })
+    }
 
 });
 
