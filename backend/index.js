@@ -12,7 +12,7 @@ import isLoggedIn from './middlewares/isLoggedIn.js';
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: 'https://mytodoapp-mu.vercel.app' }));
+app.use(cors());
 app.get('/', (req, res) => {
   res.send("Hello world");
 });
