@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGODB_URL);
 const fail = 'fail';
 
 app.post('/signup', async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mytodoapp-fqj8.vercel.app/');
+  res.setHeader('Access-Control-Allow-Origin', 'https://mytodoapp-fqj8.vercel.app//');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
