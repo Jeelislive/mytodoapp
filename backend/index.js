@@ -14,6 +14,10 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: 'https://mytodoapp-mu.vercel.app' }));
 
+app.get('/', (req, res) => {
+  res.send("Hello world");
+});
+
 mongoose.connect(process.env.MONGODB_URL);
 const fail = 'fail';
 
