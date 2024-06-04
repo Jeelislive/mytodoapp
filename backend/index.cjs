@@ -1,4 +1,3 @@
-// Your main file content goes here
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
@@ -10,28 +9,29 @@ import User from './models/user.js';
 import isLoggedIn from './middlewares/isLoggedIn.js';
 
 const app = express();
+const server = require('http').createServer(app); // Define server for socket.io
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [ 'https://mytodoapp-mu.vercel.app', 'https://mytodoapp-fqj8.vercel.app' ], // Allow from your frontends
+  methods: [ 'GET', 'POST' ],
+  allowedHeaders: [ 'Content-Type', 'Authorization' ]
+}));
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'https://mytodoapp-mu.vercel.app',
+    methods: [ 'GET', 'POST' ]
+  }
+});
 
 app.get('/', (req, res) => {
   res.send("Hello world");
 });
 
-const io = require('socket.io')(server, {
-  cors: {
-    origin: 'https://mytodoapp-mu.vercel.app', // Allow from your frontend
-    methods: [ 'GET', 'POST' ]
-  }
-});
-
-mongoose.connect(process.env.MONGODB_URL);
-const fail = 'fail';
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.post('/signup', async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://mytodoapp-fqj8.vercel.app//');
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const { username, email, password } = req.body;
 
@@ -54,12 +54,12 @@ app.post('/signup', async (req, res) => {
       payload,
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
-    )
+    );
 
     res.status(200).json({
       status: "success",
-      message: "signup successfully",
-      date: {
+      message: "Signup successfully",
+      data: {
         user: user,
         token: token
       }
@@ -67,11 +67,10 @@ app.post('/signup', async (req, res) => {
 
   } catch (error) {
     res.status(400).json({
-      status: fail,
+      status: 'fail',
       message: error.message
-    })
+    });
   }
-
 });
 
 app.post('/login', async (req, res) => {
@@ -80,7 +79,7 @@ app.post('/login', async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      throw new Error("invalid email or password")
+      throw new Error("Invalid email or password");
     }
 
     const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
@@ -106,20 +105,17 @@ app.post('/login', async (req, res) => {
         token: token,
         user: user,
       }
-    })
+    });
 
   } catch (error) {
     console.log(error);
     res.status(400).json({
-      status: fail,
+      status: 'fail',
       message: error.message,
-    })
+    });
   }
-})
-
-
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
 });
 
-
+server.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
