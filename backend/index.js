@@ -17,6 +17,13 @@ app.get('/', (req, res) => {
   res.send("Hello world");
 });
 
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'https://mytodoapp-mu.vercel.app', // Allow from your frontend
+    methods: ['GET', 'POST'] 
+  }
+});
+
 mongoose.connect(process.env.MONGODB_URL);
 const fail = 'fail';
 
