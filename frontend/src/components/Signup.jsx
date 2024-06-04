@@ -25,9 +25,9 @@ const Signup = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ username, email, password }),
-                mode: 'cors'
+                mode: 'no-cors'
             }
-            const response = await fetch('https://mytodoapp-fqj8.vercel.app//signup', option);
+            const response = await fetch('https://mytodoapp-fqj8.vercel.app/signup', option);
 
             if (response.ok) {
                 navigate('/todo');
